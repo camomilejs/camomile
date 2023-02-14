@@ -16,19 +16,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v2.4.0
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: lts/*
-          cache: yarn
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: pnpm
       - name: Install dependencies
-        run: yarn
+        run: pnpm install --ignore-scripts
       - name: Lint (Prettier)
-        run: yarn prettier
+        run: pnpm prettier
+        env:
+          FORCE_COLOR: 2
       - name: Lint (ESLint)
-        run: yarn lint
+        run: pnpm lint
+        env:
+          FORCE_COLOR: 2
 
   test:
     name: Run tests on ${{ matrix.os }} with Node.js v${{ matrix.node }}
@@ -38,26 +43,25 @@ jobs:
     strategy:
       matrix:
         node:
+          - 14.x
           - 16.x
-          # - lts/fermium
-          # - lts/erbium
+          - 18.x
         os:
           - ubuntu-latest
-          # - windows-latest
-          # - macos-latest
 
     steps:
       - name: Configure git line-breaks for Windows
         run: git config --global core.autocrlf false
         if: matrix.os == 'windows-latest'
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v2.4.0
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: pnpm
       - name: Install dependencies
-        run: yarn
+        run: pnpm i
       - name: Test
-        run: yarn test
+        run: pnpm test
