@@ -13,7 +13,7 @@
 		"pretty": true,
 		"resolveJsonModule": true,
 		"target": "ES2019",
-		"strictNullChecks": true,
+		"strictNullChecks": true
 	},
 	"include": ["src", "rollup.config.ts"],
 	"exclude": ["dist", "node_modules"]
