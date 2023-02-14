@@ -3,7 +3,9 @@ import json from "@rollup/plugin-json";
 import typescript from "@rollup/plugin-typescript";
 import { Plugin, RollupOptions } from "rollup";
 
-import packageJson from "./package.json";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const packageJson = require("./package.json");
 
 const banner = `/**
 * Camomile, the workflow automation toolset
