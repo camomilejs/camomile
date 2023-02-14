@@ -17,16 +17,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
       - uses: actions/setup-node@v3
         with:
           node-version: latest
           cache: pnpm
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm install --ignore-scripts
       - name: Lint (Prettier)
         run: pnpm prettier
+        env:
+          FORCE_COLOR: 2
       - name: Lint (ESLint)
         run: pnpm lint
+        env:
+          FORCE_COLOR: 2
 
   test:
     name: Run tests on ${{ matrix.os }} with Node.js v${{ matrix.node }}
@@ -47,10 +54,12 @@ jobs:
         run: git config --global core.autocrlf false
         if: matrix.os == 'windows-latest'
       - uses: actions/checkout@v3
-      - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: ${{ matrix.node }}
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
           cache: pnpm
       - name: Install dependencies
         run: pnpm i
